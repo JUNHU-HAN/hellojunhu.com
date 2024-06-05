@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JUNHU HAN</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #444;
+            padding: 0 20px;
+        }
+        nav a {
+            color: #fff;
+            padding: 14px 20px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 700;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        #login-btn {
+            background-color: #fee500;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #3c1e1e;
+            margin-left: auto;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #111;
+            border-radius: 10px;
+        }
+        .hero {
+            background-color: #222;
+            padding: 50px 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+        .hero h2 {
+            margin: 0;
+            font-size: 2em;
+        }
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .content .card {
+            background-color: #333;
+            border: 1px solid #555;
+            margin: 10px;
+            padding: 20px;
+            width: calc(33% - 40px);
+            box-sizing: border-box;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .content .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .content .card h3 {
+            margin-top: 10px;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+        section {
+            padding: 60px 20px;
+            border-radius: 10px;
+        }
+        #about, #services, #contact {
+            background-color: #222;
+            margin-top: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form input, form textarea, form select {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #444;
+            color: #fff;
+        }
+        form button {
+            background-color: #555;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #666;
+        }
+        #form-container {
+            display: none;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginBtn = document.getElementById('login-btn');
+            const formContainer = document.getElementById('form-container');
+            const loginContainer = document.getElementById('login-container');
+
+            loginBtn.addEventListener('click', () => {
+                const redirectUri = 'https://hellojunhu.com/.netlify/functions/kakao-callback';
+                const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=YOUR_CLIENT_ID&redirect_uri=${redirectUri}`;
+                window.location.href = kakaoAuthUrl;
+            });
+
+            const code = new URL(window.location.href).searchParams.get('code');
+            if (code) {
+                fetch(`/.netlify/functions/kakao-callback?code=${code}`)
+                    .then(response => response.json())
+                    .then(user => {
+                        console.log(user);
+                        loginContainer.style.display = 'none';
+                        formContainer.style.display = 'block';
+                    })
+                    .catch(error => console.error(error));
+            }
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>JUNHU HAN</h1>
+    </header>
+    <nav>
+        <div>
+            <a href="#home">홈</a>
+            <a href="#about">소개</a>
+            <a href="#services">서비스</a>
+            <a href="#contact">연락처</a>
+        </div>
+        <button id="login-btn">카카오톡으로 로그인</button>
+    </nav>
+    <div class="container">
+        <div id="home" class="hero">
+            <h2>홈페이지에 방문하신걸 환영합니다.</h2>
+            <p>hellojunhu.com</p>
+        </div>
+        <section id="about">
+            <h2>안내</h2>
+            <p>방문해 주셔서 감사합니다.</p>
+            <p>더 많은 정보를 원하시면 <a href="https://naver.me/IMRyYvLV">여기</a>를 클릭하세요.</p>
+        </section>
+        <section id="services">
+            <h2>정보</h2>
+            <div class="content">
+                <div class="card">
+                    <img src="사진1.png" alt="일상 생활">
+                    <p>일상 생활</p>
+                </div>
+                <div class="card">
+                    <img src="사진2.webp" alt="엔트리 (블록 코딩)">
+                    <p>엔트리 (블록 코딩)</p>
+                </div>
+                <div class="card">
+                    <img src="사진3.jpg" alt="유튜브 채널">
+                    <p>유튜브 채널</p>
+                </div>
+            </div>
+        </section>
+        <section id="contact">
+            <h2>연락처</h2>
+            <p>문의 사항이 있으시면 이메일로 연락해 주세요.</p>
+            <p>junhu@hellojunhu.com</p>
+            <div id="login-container">
+                <!-- 로그인 버튼은 네비게이션 바로 이동 -->
+            </div>
+            <div id="form-container">
+                <form name="contact" method="POST" data-netlify="true">
+                    <p>
+                        <label>이름: <input type="text" name="name" required /></label>
+                    </p>
+                    <p>
+                        <label>이메일: <input type="email" name="email" required /></label>
+                      </br>
+                        <label>메시지: <textarea name="message" required></textarea></label>
+                    </p>
+                    <p>
+                        <button type="submit">보내기</button>
+                    </p>
+                </form>
+            </div>
+        </section>
+    </div>
+    <footer>
+        <p>&copy; 2024 JUNHU HAN. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+
+
